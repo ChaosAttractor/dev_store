@@ -46,7 +46,7 @@ stop: ## Остановка docker контейнеров
 # --- [ Web Client ]  --------------------------------------------------------------------------------------------------
 
 npm-web-client: ## Установка npm зависимостей для Web клиента
-	cd repositories/svc_frontend_truck/client && npm i
+	cd repositories/ui_store/client && npm i
 
 dev-web-client: ## Запуск dev режима Web клиента
-	cd repositories/svc_frontend_truck/client && npm run dev
+	cd repositories/ui_store/client && npm run dev
