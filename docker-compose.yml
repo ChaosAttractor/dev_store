@@ -1,0 +1,56 @@
+version: '3.8'
+
+x-base:
+  &base
+  networks:
+    - store_network
+  restart: always
+
+services:
+  postgres:
+    <<: *base
+    build: ./docker/postgres
+    container_name: postgres
+    volumes:
+      - ./postgres/db_backups:/backups
+      - ./postgres/pg:/var/lib/postgresql/data
+    mem_reservation: 128m
+    mem_limit: 512m
+    env_file:
+      - .env
+    ports:
+      - "127.0.0.1:5432:5432"
+
+  svc-store:
+    <<: *base
+    container_name: svc-store
+    build: ./docker/svc_store
+    volumes:
+      - ./services/svc_store/app:/app
+    ports:
+      - "127.0.0.1:8080:8080"
+    env_file:
+      - .env
+    expose:
+      - "8080"
+    depends_on:
+      - postgres
+
+  minio:
+    <<: *base
+    build: ./docker/minio
+    ports:
+      - "127.0.0.1:3010:9090"
+    volumes:
+      - ./minio:/data1
+    env_file:
+      - .env
+    expose:
+      - "9000"
+      - "9001"
+    mem_reservation: 512m
+    mem_limit: 512m
+
+networks:
+  store_network:
+    driver: bridge
