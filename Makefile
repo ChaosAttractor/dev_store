@@ -27,7 +27,7 @@ init-microservices:  ## Инициализация микросервисов
 right-folders: ## Выдача прав на папки с сервисами для корректного запуска dev режима
 	sudo chown -R $(USER):$(USER) services/ \
 	&& sudo chown -R $(USER):$(USER) postgres/ \
-	&& sudo chown -R $(USER):$(USER) services/svc_truck/app/ \
+	&& sudo chown -R $(USER):$(USER) services/svc_store/app/ \
 
 # --- [ Containers ]  --------------------------------------------------------------------------------------------------
 
