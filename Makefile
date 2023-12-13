@@ -18,7 +18,7 @@ init-repositories: ## Клонирование репозиториев и env
 	&& mkdir -p postgres \
 	&& mkdir -p postgres/pg \
 	&& mkdir -p postgres/db_backups \
-	&& sh ./scripts/cp-env.sh \
+	&& sh ./scripts/copy-env.sh \
 	&& sh ./scripts/git-clone.sh
 
 init-microservices:  ## Инициализация микросервисов
