@@ -1,7 +1,5 @@
 SHELL = /bin/sh
 docker_bin := $(shell command -v docker 2> /dev/null)
-docker_compose_bin := $(shell command -v docker-compose 2> /dev/null)
-profiles=
 
 .DEFAULT_GOAL := help
 
@@ -32,13 +30,13 @@ right-folders: ## Выдача прав на папки с сервисами д
 # --- [ Containers ]  --------------------------------------------------------------------------------------------------
 
 build: ## Сборка docker контейнеров приложения
-	$(docker_compose_bin) build
+	$(docker_bin) compose build
 
 up: ## Сборка и поднятие docker контейнеров
-	$(docker_compose_bin) -f docker-compose.yml up --remove-orphans
+	$(docker_bin) compose -f docker-compose.yml up --remove-orphans
 
 down: ## Удаление docker контейнеров
-	$(docker_compose_bin) down
+	$(docker_bin) compose down
 
 stop: ## Остановка docker контейнеров
 	@$(docker_bin) ps -aq | xargs $(docker_bin) stop
