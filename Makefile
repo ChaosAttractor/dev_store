@@ -12,10 +12,13 @@ help: ## Просмотр всех команд
 init: init-repositories init-microservices right-folders up ## Инициализация проекта
 
 init-repositories: ## Клонирование репозиториев и env
-	mkdir -p services \
-	&& mkdir -p postgres \
-	&& mkdir -p postgres/pg \
-	&& mkdir -p postgres/db_backups \
+	sudo chown -R $(USER):$(USER) ../dev_store \
+    && mkdir -p keycloak || true\
+	&& mkdir -p services || true\
+	&& mkdir -p postgres || true\
+	&& mkdir -p postgres/pg || true\
+	&& mkdir -p postgres/db_backups || true\
+	&& sudo chown -R $(USER):$(USER) keycloak/ \
 	&& sh ./scripts/copy-env.sh \
 	&& sh ./scripts/git-clone.sh
 

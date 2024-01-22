@@ -21,9 +21,27 @@ services:
     ports:
       - "127.0.0.1:5432:5432"
 
-  svc-store:
+  keycloak:
     <<: *base
-    container_name: svc-store
+    build: ./containers/keycloak
+    ports:
+      - "127.0.0.1:8090:8080"
+    volumes:
+      - ./keycloak/data:/opt/keycloak/standalone/data/
+      - ./configs:/opt/keycloak/imports
+      - ./keycloak/cache:/opt/keycloak/cache
+      - ./keycloak/conf/cache-ispn.xml:/opt/keycloak/conf/cache-ispn.xml
+      - ./keycloak/ObjectStore/:/ObjectStore/
+    env_file:
+      - .env
+    depends_on:
+      - postgres
+    mem_reservation: 512m
+    mem_limit: 512m
+
+  svc_store:
+    <<: *base
+    container_name: svc_store
     build: ./docker/svc_store
     volumes:
       - ./services/svc_store/app:/app
@@ -31,6 +49,11 @@ services:
       - "127.0.0.1:8080:8080"
     env_file:
       - .env
+    healthcheck:
+      test: [ "CMD-SHELL", "wget --spider -S http://localhost:8080/health || exit 1" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     expose:
       - "8080"
     depends_on:
@@ -50,6 +73,23 @@ services:
       - "9001"
     mem_reservation: 512m
     mem_limit: 512m
+
+  nginx:
+    <<: *base
+    build: ./docker/nginx
+    ports:
+      - "127.0.0.1:80:80"
+    volumes:
+      - ./logs/nginx:/var/log/nginx
+      - /etc/localtime:/etc/localtime/:ro
+      - ./services/svc_store/app:/var/www/api
+    command: nginx -g "daemon off;"
+    depends_on:
+      - svc_store
+    mem_reservation: 20m
+    mem_limit: 512m
+    expose:
+      - "80"
 
 networks:
   store_network:
