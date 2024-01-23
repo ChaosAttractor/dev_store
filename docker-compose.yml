@@ -28,7 +28,6 @@ services:
       - "127.0.0.1:8090:8080"
     volumes:
       - ./keycloak/data:/opt/keycloak/standalone/data/
-      - ./configs:/opt/keycloak/imports
       - ./keycloak/cache:/opt/keycloak/cache
       - ./keycloak/conf/cache-ispn.xml:/opt/keycloak/conf/cache-ispn.xml
       - ./keycloak/ObjectStore/:/ObjectStore/
@@ -63,16 +62,20 @@ services:
     <<: *base
     build: ./docker/minio
     ports:
-      - "127.0.0.1:3010:9090"
+      - "127.0.0.1:9000:9000"
+      - "127.0.0.1:9001:9001"
     volumes:
       - ./minio:/data1
     env_file:
       - .env
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -fsSI http://localhost:9000/minio/health/live || exit 1" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     expose:
       - "9000"
       - "9001"
-    mem_reservation: 512m
-    mem_limit: 512m
 
   nginx:
     <<: *base
