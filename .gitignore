@@ -11,6 +11,7 @@ lerna-debug.log*
 postgres/
 data/
 minio/
+redis/
 !docker/minio
 !docker/postgres
 
