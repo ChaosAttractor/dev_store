@@ -47,8 +47,8 @@ stop: ## Остановка docker контейнеров
 
 # --- [ Web Client ]  --------------------------------------------------------------------------------------------------
 
-npm-web-client: ## Установка npm зависимостей для Web клиента
-	cd repositories/ui_store/client && npm i
+npm-front: ## Установка npm зависимостей для Web клиента
+	cd services/ui_store/ && npm i
 
-dev-web-client: ## Запуск dev режима Web клиента
-	cd repositories/ui_store/client && npm run dev
+dev-front: ## Запуск dev режима Web клиента
+	cd services/ui_store/ && npm run dev
